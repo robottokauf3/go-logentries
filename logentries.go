@@ -1,11 +1,12 @@
 // Go support for logging to Logentries, http://logentries.com
-// Version 0.1.0
+// Version 0.2.0
 //
 // Copyright 2014 Robert Kaufmann III
 
 package logentries
 
 import (
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"log"
@@ -23,9 +24,10 @@ const (
 	Panic
 )
 
-// Logentires endpoint
+// Logentires endpoints
 const (
-	endpoint string = "data.logentries.com:80"
+	tcpEndpoint string = "data.logentries.com:80"
+	sslEndpoint string = "api.logentries.com:20000"
 )
 
 // Default tags for log levels
@@ -46,9 +48,16 @@ type Logger struct {
 }
 
 // New creates a new logging client with supplied token
-func New(token string) (*Logger, error) {
+func New(token string, ssl bool) (*Logger, error) {
 	// Setup the connection
-	conn, err := net.Dial("tcp", endpoint)
+	var conn net.Conn
+	var err error
+
+	if ssl {
+		conn, err = tls.Dial("tcp", sslEndpoint, &tls.Config{})
+	} else {
+		conn, err = net.Dial("tcp", tcpEndpoint)
+	}
 	if err != nil {
 		return nil, err
 	}
