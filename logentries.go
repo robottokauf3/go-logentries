@@ -8,7 +8,6 @@ package logentries
 import (
 	"crypto/tls"
 	"errors"
-	"fmt"
 	"log"
 	"net"
 )
