@@ -1,5 +1,5 @@
 // Go support for logging to Logentries, http://logentries.com
-// Version 0.2.0
+// Version 0.2.1
 //
 // Copyright 2014 Robert Kaufmann III
 
@@ -139,7 +139,6 @@ func (l *Logger) SendRaw(message string) error {
 
 // send transmits message to LogEntries
 func (l *Logger) send(log string) error {
-	fmt.Println(log)
 	_, err := l.connection.Write([]byte(log))
 	return err
 }
